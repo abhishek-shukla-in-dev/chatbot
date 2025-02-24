@@ -1,12 +1,18 @@
 /* ✅ Apply Poppins Font Globally */
 body {
     font-family: 'Poppins', sans-serif;
+    background-color: #f7f7f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
 }
 
-/* General Chatbot Styling */
+/* ✅ Chatbot Container */
 .chat-container {
-    width: 500px;
-    height: 700px;
+    width: 420px;
+    height: 550px;
     background: white;
     padding: 15px;
     border-radius: 15px;
@@ -15,7 +21,7 @@ body {
     flex-direction: column;
 }
 
-/* Chat Box */
+/* ✅ Chat Box */
 .chat-box {
     flex-grow: 1;
     overflow-y: auto;
@@ -24,7 +30,7 @@ body {
     flex-direction: column;
 }
 
-/* User Messages */
+/* ✅ User Messages */
 .user-message {
     background: #007bff;
     color: white;
@@ -34,9 +40,10 @@ body {
     border-radius: 15px 15px 0 15px;
     max-width: 75%;
     margin: 5px;
+    font-weight: 600;
 }
 
-/* Bot Messages */
+/* ✅ Bot Messages */
 .bot-message {
     background: #f1f0f0;
     color: black;
@@ -46,9 +53,10 @@ body {
     border-radius: 15px 15px 15px 0;
     max-width: 75%;
     margin: 5px;
+    font-weight: 400;
 }
 
-/* Typing Indicator */
+/* ✅ Typing Indicator */
 .typing {
     font-style: italic;
     color: gray;
@@ -62,7 +70,7 @@ body {
     100% { opacity: 0.3; }
 }
 
-/* Input Area */
+/* ✅ Input Area */
 .input-container {
     display: flex;
     align-items: center;
@@ -70,7 +78,7 @@ body {
     padding: 10px;
 }
 
-/* Input Field */
+/* ✅ Input Field */
 input {
     flex-grow: 1;
     padding: 12px;
@@ -80,7 +88,7 @@ input {
     outline: none;
 }
 
-/* ✅ Send Button Styling */
+/* ✅ Send Button */
 button {
     width: 50px;
     height: 50px;
@@ -106,7 +114,7 @@ button i {
     color: white;
 }
 
-/* Responsive Design */
+/* ✅ Responsive Design */
 @media (max-width: 500px) {
     .chat-container {
         width: 90%;
@@ -117,3 +125,5 @@ button i {
         height: 400px;
     }
 }
+
+
