@@ -80,7 +80,7 @@ input {
     outline: none;
 }
 
-/* Send Button */
+/* ✅ Send Button Styling */
 button {
     width: 50px;
     height: 50px;
@@ -95,14 +95,15 @@ button {
     justify-content: center;
 }
 
-/* Send Button Hover */
+/* ✅ Send Button Hover Effect */
 button:hover {
     background: #0056b3;
 }
 
-/* Send Button Icon */
+/* ✅ Ensure Icon is Visible */
 button i {
     font-size: 18px;
+    color: white;
 }
 
 /* Responsive Design */

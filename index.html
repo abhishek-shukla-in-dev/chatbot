@@ -8,7 +8,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <!-- ✅ Add FontAwesome for send button icon -->
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <!-- ✅ Correct FontAwesome Link (No CORS Issues) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
     <div class="chat-container">
@@ -16,7 +17,7 @@
         <div class="input-container">
             <input type="text" id="user-input" placeholder="Type a message..." onkeypress="handleKeyPress(event)">
             <button onclick="sendMessage()">
-                <i class="fas fa-paper-plane"></i> <!-- ✅ Send button icon -->
+                <i class="fa-solid fa-paper-plane"></i> <!-- ✅ Corrected FontAwesome icon -->
             </button>
         </div>
     </div>
