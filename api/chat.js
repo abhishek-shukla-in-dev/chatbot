@@ -27,13 +27,14 @@ export default async function handler(req, res) {
 
         const data = await openAIResponse.json();
 
-        if (!data.choices || data.choices.length === 0) {
-            return res.status(500).json({ response: "Sorry, I couldn't generate a response." });
+        if (!data || !data.choices || data.choices.length === 0) {
+            console.error("Error: Invalid response from OpenAI", data);
+            return res.status(500).json({ response: "Sorry, I couldn't generate a response at this time." });
         }
 
         return res.status(200).json({ response: data.choices[0].message.content });
     } catch (error) {
         console.error("Error communicating with OpenAI:", error);
-        return res.status(500).json({ response: "Oops! Something went wrong." });
+        return res.status(500).json({ response: "Oops! Something went wrong. Please try again later." });
     }
 }
