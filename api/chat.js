@@ -35,7 +35,7 @@ export default async function handler(req, res) {
                     },
                     { role: "user", content: userMessage }
                 ],
-                temperature: 0.8,
+                temperature: 0.6,
                 max_tokens: 150
             })
         });
@@ -43,12 +43,12 @@ export default async function handler(req, res) {
         const data = await openAIResponse.json();
 
         if (!data.choices || data.choices.length === 0) {
-            return res.status(500).json({ response: "Sorry, I couldn't generate a response at this time." });
+            return res.status(500).json({ response: "Sorry, I couldn't generate a response at this time. Please try again later, or ask Abhishek ;)" });
         }
 
         return res.status(200).json({ response: data.choices[0].message.content });
     } catch (error) {
         console.error("Error communicating with OpenAI:", error);
-        return res.status(500).json({ response: "Oops! Something went wrong. Please try again later." });
+        return res.status(500).json({ response: "Oops! Something went wrong. Please try again later, or ask Abhishek ;)" });
     }
 }
