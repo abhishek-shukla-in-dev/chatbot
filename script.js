@@ -105,3 +105,9 @@ function scrollToBottom() {
     let chatBox = document.getElementById("chat-box");
     chatBox.scrollTop = chatBox.scrollHeight;
 }
+
+function handleKeyPress(event) {
+    if (event.key === "Enter") {
+        sendMessage();
+    }
+}
