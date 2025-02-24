@@ -1,5 +1,32 @@
 
-const API_KEY = ""; // Replace with your actual API key
+// ✅ Fetch OpenAI Response via Secure Vercel Backend
+async function fetchOpenAIResponse() {
+    const API_URL = "https://chatbot-xi-cyan.vercel.app/"; // Replace with your actual Vercel deployment URL
+
+    try {
+        let response = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                messages: [
+                    { role: "system", content: "You are a friendly and fun chatbot that loves to engage users with positive and witty responses. You try to help people get out of a bad mood. The name of your primary user is Alpana. She is a 40-year-old married lady. She is a caring mother of her son, Akshat, a 4-year-old boy. Abhishek, her husband, is the developer of this chatbot. Alpana works for SAP Labs as a quality expert and security compliance coordinator." },
+                    ...chatHistory // Pass only the last 10 messages
+                ],
+                temperature: 0.8,
+                max_tokens: 150
+            })
+        });
+
+        let data = await response.json();
+        return data.response || "Hmm, I'm not sure how to respond to that. I'll try better the nest time. Can you ask me something else? Or, check with Abhishek ;)";
+    } catch (error) {
+        console.error("Error fetching response:", error);
+        return "Oops! Something went wrong. Sorry about that! Please try again! Or, check with Abhishek ;)";
+    }
+}
+
+
+let chatHistory = []; // Stores last 10 messages
 
 async function sendMessage() {
     let userInput = document.getElementById("user-input").value;
@@ -12,6 +39,10 @@ async function sendMessage() {
     chatBox.innerHTML += userMessage;
     document.getElementById("user-input").value = "";
 
+    // Add user message to chat history
+    chatHistory.push({ role: "user", content: userInput });
+    trimChatHistory(); // Keep only last 10 messages
+
     // Show typing indicator
     let typingIndicator = document.createElement("p");
     typingIndicator.classList.add("typing");
@@ -20,7 +51,7 @@ async function sendMessage() {
 
     scrollToBottom();
 
-    // Get response (Custom or AI-generated)
+    // Get bot response
     let botResponse = await getBotResponse(userInput);
 
     // Remove Typing Indicator & Show Bot Response
@@ -30,16 +61,20 @@ async function sendMessage() {
     botMessage.innerText = botResponse;
     chatBox.appendChild(botMessage);
 
+    // Add bot response to chat history
+    chatHistory.push({ role: "assistant", content: botResponse });
+    trimChatHistory(); // Keep only last 10 messages
+
     // Smooth fade-in effect
     botMessage.style.opacity = 0;
     setTimeout(() => {
         botMessage.style.opacity = 1;
- }, 100);
+    }, 100);
 
     scrollToBottom();
 }
 
-// ✅ Predefined Responses for Common Questions
+// ✅ Get Bot Response with Chat History (Last 10 Messages)
 async function getBotResponse(input) {
     const customResponses = {
         "hello": "Hey there, Alpana! Hope you're having an amazing day! 😊",
@@ -52,55 +87,43 @@ async function getBotResponse(input) {
         "who developed you?": "I was built for your service by Abhishek!",
         "who are you?": "I am your smart assistant, Alpana. I was built for your service by Abhishek!",
         "bye": "Goodbye, Alpana! Have a great day! 👋"
- };
+    };
 
     let lowerInput = input.toLowerCase();
     if (customResponses[lowerInput]) {
         return customResponses[lowerInput]; // Instant response for common queries
- }
+    }
 
     // If no predefined response, fetch AI-generated response
-    return await fetchOpenAIResponse(input);
+    return await fetchOpenAIResponse();
 }
-
-// ✅ Call OpenAI API for Dynamic Responses
-async function fetchOpenAIResponse(input) {
-    const apiUrl = "https://api.openai.com/v1/chat/completions";
-
-    const headers = {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${API_KEY}`
- };
-
-    const body = {
-        model: "gpt-3.5-turbo",
-        messages: [
- { role: "system", content: "You are a friendly and fun chatbot that loves to engage users with positive and witty responses. You try to help people get out of a bad mood. The name of your primary user is Alpana. She is a 40 years old married lady. She is a caring mother of her son, Akshat, a 4 year old boy. Abhishek, her husband, is the developer of this chatbot. Alpana works for SAP Labs as a quality expert and security compliance coordinator. She is passionate about health and fitness. She is an expert badminton player and has won many awards in SAP for badminton." },
- { role: "user", content: input }
- ],
-        temperature: 0.8,
-        max_tokens: 150
- };
 
     try {
         let response = await fetch(apiUrl, {
             method: "POST",
             headers: headers,
             body: JSON.stringify(body)
- });
+        });
 
         let data = await response.json();
         console.log("API Response:", data);
 
         if (data.choices && data.choices.length > 0) {
             return data.choices[0].message.content.trim();
- } else {
+        } else {
             return "Hmm, I'm not sure how to respond to that. I'll try better the nest time. Can you ask me something else? Or, check with Abhishek ;)";
- }
- } catch (error) {
+        }
+    } catch (error) {
         console.error("Error fetching AI response:", error);
         return "Oops! Something went wrong. Sorry about that! Please try again! Or, check with Abhishek ;)";
- }
+    }
+}
+
+// ✅ Trim Chat History to Keep Only the Last 10 Messages
+function trimChatHistory() {
+    if (chatHistory.length > 10) {
+        chatHistory = chatHistory.slice(chatHistory.length - 10); // Keep only the last 10 messages
+    }
 }
 
 // ✅ Smooth Scrolling to Bottom
@@ -108,3 +131,4 @@ function scrollToBottom() {
     let chatBox = document.getElementById("chat-box");
     chatBox.scrollTop = chatBox.scrollHeight;
 }
+
