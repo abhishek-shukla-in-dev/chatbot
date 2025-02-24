@@ -3,14 +3,14 @@ const API_URL = "https://chatbot-xi-cyan.vercel.app/api/chat"; // Correct Vercel
 async function fetchOpenAIResponse(input) {
     try {
         let response = await fetch(API_URL, {
-            method: "POST",
+            method: "POST", // ✅ Ensures it sends a POST request
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ message: input })
+            body: JSON.stringify({ message: input }) // ✅ Sends user message in request body
         });
 
         let data = await response.json();
 
-        if (!data || !data.response) {
+        if (!data.response) {
             console.error("Error: No valid response from OpenAI", data);
             return "Oops! I couldn't generate a response. Please try again!";
         }
