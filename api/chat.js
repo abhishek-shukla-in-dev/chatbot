@@ -42,14 +42,14 @@ export default async function handler(req, res) {
                 model: "gpt-4",
                 messages: messages,
                 temperature: 0.3,
-                max_tokens: userMessage.length > 50 ? 300 : 150
+                max_tokens: 300
             })
         });
 
         const data = await openAIResponse.json();
 
         if (!data.choices || data.choices.length === 0) {
-            return res.status(500).json({ response: "Sorry, I couldn't generate a response. Try again later!" });
+            return res.status(500).json({ response: "Sorry, I couldn't generate a response. Try again later, or ask Abhishek!" });
         }
 
         return res.status(200).json({ response: data.choices[0].message.content });
