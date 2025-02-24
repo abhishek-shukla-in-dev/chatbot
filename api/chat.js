@@ -1,16 +1,17 @@
 export default async function handler(req, res) {
-    // ✅ Enable CORS for GitHub Pages
-    res.setHeader("Access-Control-Allow-Origin", "https://abhishek-shukla-in-dev.github.io"); 
+    // ✅ Fix CORS: Allow requests from GitHub Pages
+    res.setHeader("Access-Control-Allow-Origin", "https://abhishek-shukla-in-dev.github.io");
     res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-    // ✅ Handle CORS Preflight Requests (Fixes "It does not have HTTP ok status")
+    // ✅ Handle CORS Preflight Requests
     if (req.method === "OPTIONS") {
-        return res.status(200).end();
+        return res.status(200).end(); // Respond with HTTP 200 OK
     }
 
+    // ✅ Ensure Only POST Requests Are Allowed
     if (req.method !== "POST") {
-        return res.status(405).json({ error: "Only POST requests allowed" });
+        return res.status(405).json({ error: "Method Not Allowed. Only POST requests are supported." });
     }
 
     const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
@@ -52,52 +53,53 @@ export default async function handler(req, res) {
         { role: "user", content: userMessage }
     ];
 
+
     // Define functions for structured responses
     const functions = [
         {
-            "name": "generate_email",
-            "description": "Generate a well-structured email draft",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "subject": { "type": "string", "description": "The subject line of the email" },
-                    "body": { "type": "string", "description": "The main body of the email" },
-                    "closing": { "type": "string", "description": "The closing statement of the email" }
-                },
-                "required": ["subject", "body", "closing"]
-            }
+                   "name": "generate_email",
+                   "description": "Generate a well-structured email draft",
+                   "parameters": {
+                       "type": "object",
+                       "properties": {
+                           "subject": { "type": "string", "description": "The subject line of the email" },
+                           "body": { "type": "string", "description": "The main body of the email" },
+                           "closing": { "type": "string", "description": "The closing statement of the email" }
         },
-        {
-            "name": "generate_todo_list",
-            "description": "Generate a structured to-do list based on user requests",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "tasks": { 
-                        "type": "array", 
-                        "items": { "type": "string" }, 
-                        "description": "A list of tasks to complete" 
-                    }
-                },
-                "required": ["tasks"]
-            }
-        },
-        {
-            "name": "generate_fitness_tips",
-            "description": "Provide structured fitness tips based on Alpana's interest in health",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "tips": { 
-                        "type": "array", 
-                        "items": { "type": "string" }, 
-                        "description": "A list of fitness tips" 
-                    }
-                },
-                "required": ["tips"]
-            }
+                       "required": ["subject", "body", "closing"]
         }
-    ];
+        },
+        {
+                   "name": "generate_todo_list",
+                   "description": "Generate a structured to-do list based on user requests",
+                   "parameters": {
+                       "type": "object",
+                       "properties": {
+                           "tasks": { 
+                               "type": "array", 
+                               "items": { "type": "string" }, 
+                               "description": "A list of tasks to complete" 
+        }
+        },
+                       "required": ["tasks"]
+        }
+        },
+        {
+                   "name": "generate_fitness_tips",
+                   "description": "Provide structured fitness tips based on Alpana's interest in health",
+                   "parameters": {
+                       "type": "object",
+                       "properties": {
+                           "tips": { 
+                               "type": "array", 
+                               "items": { "type": "string" }, 
+                               "description": "A list of fitness tips" 
+        }
+        },
+                       "required": ["tips"]
+        }
+        }
+        ];
 
     try {
         const openAIResponse = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -111,7 +113,6 @@ export default async function handler(req, res) {
                 messages: messages,
                 temperature: 0.3,  // ✅ More factual responses
                 max_tokens: 300,   // ✅ Increased length for structured responses
-                functions: functions,  // ✅ Enables structured responses
                 response_format: "json" // ✅ Ensures JSON output
             })
         });
@@ -122,28 +123,7 @@ export default async function handler(req, res) {
             return res.status(500).json({ response: "Sorry, I couldn't generate a response at this time. Please try again later, or ask Abhishek ;)" });
         }
 
-        // Handle function responses
-        const messageResponse = data.choices[0].message;
-        if (messageResponse.function_call) {
-            const functionName = messageResponse.function_call.name;
-            const functionArguments = JSON.parse(messageResponse.function_call.arguments);
-
-            if (functionName === "generate_email") {
-                return res.status(200).json({ 
-                    response: `📩 **Email Draft:**\n\n**Subject:** ${functionArguments.subject}\n\n**Body:**\n${functionArguments.body}\n\n**Closing:**\n${functionArguments.closing}` 
-                });
-            } else if (functionName === "generate_todo_list") {
-                return res.status(200).json({ 
-                    response: `📝 **To-Do List:**\n- ${functionArguments.tasks.join("\n- ")}` 
-                });
-            } else if (functionName === "generate_fitness_tips") {
-                return res.status(200).json({ 
-                    response: `💪 **Fitness Tips:**\n- ${functionArguments.tips.join("\n- ")}` 
-                });
-            }
-        }
-
-        return res.status(200).json({ response: messageResponse.content });
+        return res.status(200).json({ response: data.choices[0].message.content });
 
     } catch (error) {
         console.error("Error communicating with OpenAI:", error);
