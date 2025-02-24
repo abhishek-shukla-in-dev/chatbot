@@ -11,13 +11,12 @@ body {
 
 /* Chat Container - Increased Width & Height */
 .chat-container {
-    width: 500px; /* Increased width */
-    height: 700px; /* Increased height */
+    width: 500px; /* Slightly wider */
+    height: 700px; /* More space */
     background: white;
     padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
+    border-radius: 15px; /* More rounded */
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2); /* Modern shadow */
     display: flex;
     flex-direction: column;
 }
@@ -50,20 +49,26 @@ body {
 
 /* Bot Messages - Now Left-Aligned */
 .bot-message {
-    background: #d1e7dd;
+    background: #f1f0f0;
+    color: black;
     align-self: flex-start;
-    text-align: left; /* Left-align text */
-    width: fit-content;
-    max-width: 80%;
+    text-align: left;
+    padding: 10px;
+    border-radius: 15px 15px 15px 0;
+    max-width: 75%;
+    margin: 5px;
 }
 
 /* User Messages - Right Aligned */
 .user-message {
-    background: #cfe2ff;
+    background: #007bff;
+    color: white;
     align-self: flex-end;
-    text-align: right;
-    width: fit-content;
-    max-width: 80%;
+    text-align: left;
+    padding: 10px;
+    border-radius: 15px 15px 0 15px; /* Rounded corner */
+    max-width: 75%;
+    margin: 5px;
 }
 
 /* Typing Indicator */
@@ -71,6 +76,14 @@ body {
     font-style: italic;
     color: gray;
     align-self: flex-start;
+    padding: 5px;
+    animation: fadeInOut 1.5s infinite;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0.3; }
+    50% { opacity: 1; }
+    100% { opacity: 0.3; }
 }
 
 /* Input Field & Button Container */
