@@ -12,13 +12,13 @@ async function fetchOpenAIResponse(input) {
 
         if (!data.response) {
             console.error("Error: No valid response from OpenAI", data);
-            return "Oops! I couldn't generate a response. Please try again!";
+            return "Oops! I couldn't generate a response. Please try again, or ask Abhishek ;)";
         }
 
         return data.response;
     } catch (error) {
         console.error("Error fetching response:", error);
-        return "Oops! Something went wrong. Sorry about that! Please try again.";
+        return "Oops! Something went wrong. Sorry about that! Please try again, or ask Abhishek ;).";
     }
 }
 
