@@ -1,8 +1,7 @@
+const API_URL = "https://chatbot-xi-cyan.vercel.app/api/chat"; // Correct Vercel API endpoint
 
 // ✅ Fetch OpenAI Response via Secure Vercel Backend
-async function fetchOpenAIResponse() {
-    const API_URL = "https://chatbot-xi-cyan.vercel.app/"; // Replace with your actual Vercel deployment URL
-
+async function fetchOpenAIResponse(input) {
     try {
         let response = await fetch(API_URL, {
             method: "POST",
@@ -18,13 +17,12 @@ async function fetchOpenAIResponse() {
         });
 
         let data = await response.json();
-        return data.response || "Hmm, I'm not sure how to respond to that. I'll try better the nest time. Can you ask me something else? Or, check with Abhishek ;)";
+        return data.response || "Hmm, I'm not sure how to respond to that. I'll try better next time. Can you ask me something else? Or, check with Abhishek ;)";
     } catch (error) {
         console.error("Error fetching response:", error);
         return "Oops! Something went wrong. Sorry about that! Please try again! Or, check with Abhishek ;)";
     }
 }
-
 
 let chatHistory = []; // Stores last 10 messages
 
@@ -81,7 +79,6 @@ async function getBotResponse(input) {
         "hi": "Hi Alpana! How can I assist you today?",
         "hey": "Hey Alpana! I hope that you're having a good day. How can I help?",
         "how are you": "I'm doing well, Alpana. Thank you! How about you?",
-        //"tell me a joke": "Why don’t skeletons fight each other? Because they don’t have the guts! 😂",
         "who created you?": "I was built for your service by Abhishek!",
         "who built you?": "I was built for your service by Abhishek!",
         "who developed you?": "I was built for your service by Abhishek!",
@@ -91,10 +88,11 @@ async function getBotResponse(input) {
 
     let lowerInput = input.toLowerCase();
     if (customResponses[lowerInput]) {
-        return customResponses[lowerInput]; // Instant response for common queries
+        return customResponses[lowerInput]; // Return instant response for common queries
     }
 
-    
+    // If no predefined response, fetch AI-generated response from OpenAI (via Vercel)
+    return await fetchOpenAIResponse(input);
 }
 
 // ✅ Trim Chat History to Keep Only the Last 10 Messages
@@ -109,4 +107,3 @@ function scrollToBottom() {
     let chatBox = document.getElementById("chat-box");
     chatBox.scrollTop = chatBox.scrollHeight;
 }
-
