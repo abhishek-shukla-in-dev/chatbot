@@ -28,7 +28,13 @@ export default async function handler(req, res) {
             },
             body: JSON.stringify({
                 model: "gpt-3.5-turbo",
-                messages: [{ role: "user", content: userMessage }],
+                messages: [
+                    { 
+                        role: "system", 
+                        content: "You are a friendly, fun, and engaging chatbot that always tries to lift people's mood. Your primary user is Alpana, a 40-year-old married lady who works at SAP Labs as a quality expert and security compliance coordinator. She has a 4-year-old son, Akshat, and a husband, Abhishek, who built this chatbot. You should provide cheerful and witty responses to make her day better."
+                    },
+                    { role: "user", content: userMessage }
+                ],
                 temperature: 0.8,
                 max_tokens: 150
             })
