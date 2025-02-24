@@ -112,15 +112,36 @@ function handleKeyPress(event) {
     }
 }
 
-// ✅ Function to Clear Chat and Refresh Conversation
+
+function showWelcomeMessage() {
+    let chatBox = document.getElementById("chat-box");
+    chatBox.innerHTML = "";
+
+    let messages = [
+        "Hello, Alpana! 😊 I'm here to assist you. What can I do for you today?",
+        "Hi there, Alpana! 👋 How can I help you today?",
+        "Hey Alpana! 🎉 Ask me anything, I'm here to assist!",
+        "Hi Alpana! I hope that you're doing well 😊 How can I help you?"
+    ];
+
+    let randomMessage = messages[Math.floor(Math.random() * messages.length)];
+
+    let welcomeMessage = document.createElement("p");
+    welcomeMessage.classList.add("bot-message");
+    welcomeMessage.innerText = randomMessage;
+    chatBox.appendChild(welcomeMessage);
+}
+
+// ✅ Function to Clear Chat and Show Welcome Message Again
 function clearChat() {
     let chatBox = document.getElementById("chat-box");
     chatBox.innerHTML = ""; // Clear all messages
     chatHistory = []; // Reset chat history
 
-    // Optional: Show a fresh welcome message
-    let botMessage = document.createElement("p");
-    botMessage.classList.add("bot-message");
-    botMessage.innerText = "Chat cleared! How can I help you today? 😊";
-    chatBox.appendChild(botMessage);
+    showWelcomeMessage(); // ✅ Show the welcome message again
 }
+
+// ✅ Show the Welcome Message When Page Loads
+window.onload = showWelcomeMessage;
+
+
