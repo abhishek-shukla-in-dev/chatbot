@@ -1,13 +1,13 @@
 export default async function handler(req, res) {
     if (req.method !== "POST") {
-        return res.status(405).json({ error: "Only POST requests allowed" });
+        return res.status(405).json({ error: "Only POST requests allowed" }); // ✅ Returns correct error
     }
 
     const OPENAI_API_KEY = process.env.OPENAI_API_KEY; // Secure API Key
     const userMessage = req.body.message;
 
     if (!userMessage) {
-        return res.status(400).json({ error: "Message is required" });
+        return res.status(400).json({ error: "Message is required" }); // ✅ Prevents empty messages
     }
 
     try {
@@ -18,7 +18,7 @@ export default async function handler(req, res) {
                 "Authorization": `Bearer ${OPENAI_API_KEY}`
             },
             body: JSON.stringify({
-                model: "gpt-3.5-turbo", // Ensure correct model
+                model: "gpt-3.5-turbo",
                 messages: [{ role: "user", content: userMessage }],
                 temperature: 0.8,
                 max_tokens: 150
@@ -27,8 +27,7 @@ export default async function handler(req, res) {
 
         const data = await openAIResponse.json();
 
-        if (!data || !data.choices || data.choices.length === 0) {
-            console.error("Error: Invalid response from OpenAI", data);
+        if (!data.choices || data.choices.length === 0) {
             return res.status(500).json({ response: "Sorry, I couldn't generate a response at this time." });
         }
 
