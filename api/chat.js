@@ -1,12 +1,12 @@
 export default async function handler(req, res) {
-    // ✅ Fix CORS: Allow requests from GitHub Pages
+    // ✅ Handle CORS: Ensure GitHub Pages is allowed
     res.setHeader("Access-Control-Allow-Origin", "https://abhishek-shukla-in-dev.github.io");
     res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-    // ✅ Handle CORS Preflight Requests
+    // ✅ Handle CORS Preflight Request (OPTIONS)
     if (req.method === "OPTIONS") {
-        return res.status(200).end(); // Respond with HTTP 200 OK
+        return res.status(200).end(); // Respond with HTTP 200 OK for preflight requests
     }
 
     // ✅ Ensure Only POST Requests Are Allowed
@@ -52,54 +52,6 @@ export default async function handler(req, res) {
         ...chatHistory.slice(-5),  // ✅ Keeps last 5 messages for context
         { role: "user", content: userMessage }
     ];
-
-
-    // Define functions for structured responses
-    const functions = [
-        {
-                   "name": "generate_email",
-                   "description": "Generate a well-structured email draft",
-                   "parameters": {
-                       "type": "object",
-                       "properties": {
-                           "subject": { "type": "string", "description": "The subject line of the email" },
-                           "body": { "type": "string", "description": "The main body of the email" },
-                           "closing": { "type": "string", "description": "The closing statement of the email" }
-        },
-                       "required": ["subject", "body", "closing"]
-        }
-        },
-        {
-                   "name": "generate_todo_list",
-                   "description": "Generate a structured to-do list based on user requests",
-                   "parameters": {
-                       "type": "object",
-                       "properties": {
-                           "tasks": { 
-                               "type": "array", 
-                               "items": { "type": "string" }, 
-                               "description": "A list of tasks to complete" 
-        }
-        },
-                       "required": ["tasks"]
-        }
-        },
-        {
-                   "name": "generate_fitness_tips",
-                   "description": "Provide structured fitness tips based on Alpana's interest in health",
-                   "parameters": {
-                       "type": "object",
-                       "properties": {
-                           "tips": { 
-                               "type": "array", 
-                               "items": { "type": "string" }, 
-                               "description": "A list of fitness tips" 
-        }
-        },
-                       "required": ["tips"]
-        }
-        }
-        ];
 
     try {
         const openAIResponse = await fetch("https://api.openai.com/v1/chat/completions", {
