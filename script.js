@@ -94,29 +94,7 @@ async function getBotResponse(input) {
         return customResponses[lowerInput]; // Instant response for common queries
     }
 
-    // If no predefined response, fetch AI-generated response
-    return await fetchOpenAIResponse();
-}
-
-    try {
-        let response = await fetch(apiUrl, {
-            method: "POST",
-            headers: headers,
-            body: JSON.stringify(body)
-        });
-
-        let data = await response.json();
-        console.log("API Response:", data);
-
-        if (data.choices && data.choices.length > 0) {
-            return data.choices[0].message.content.trim();
-        } else {
-            return "Hmm, I'm not sure how to respond to that. I'll try better the nest time. Can you ask me something else? Or, check with Abhishek ;)";
-        }
-    } catch (error) {
-        console.error("Error fetching AI response:", error);
-        return "Oops! Something went wrong. Sorry about that! Please try again! Or, check with Abhishek ;)";
-    }
+    
 }
 
 // ✅ Trim Chat History to Keep Only the Last 10 Messages
