@@ -1,0 +1,104 @@
+/* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f5f5f5;
+    margin: 0;
+}
+
+/* Chat Container - Increased Width & Height */
+.chat-container {
+    width: 500px; /* Increased width */
+    height: 700px; /* Increased height */
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Chat Box - Increased Height */
+.chat-box {
+    height: 650px; /* Increased height */
+    width: 96%;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background: #fafafa;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Chat Bubbles - Bot & User */
+.bot-message, .user-message {
+    max-width: 80%;
+    padding: 10px;
+    border-radius: 15px;
+    margin: 5px;
+    font-size: 14px;
+    display: inline-block;
+    word-wrap: break-word;
+    line-height: 1.4;
+}
+
+/* Bot Messages - Now Left-Aligned */
+.bot-message {
+    background: #d1e7dd;
+    align-self: flex-start;
+    text-align: left; /* Left-align text */
+    width: fit-content;
+    max-width: 80%;
+}
+
+/* User Messages - Right Aligned */
+.user-message {
+    background: #cfe2ff;
+    align-self: flex-end;
+    text-align: right;
+    width: fit-content;
+    max-width: 80%;
+}
+
+/* Typing Indicator */
+.typing {
+    font-style: italic;
+    color: gray;
+    align-self: flex-start;
+}
+
+/* Input Field & Button Container */
+.input-container {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Small space between input and button */
+}
+
+/* User Input Box - Wider */
+input {
+    flex-grow: 1; /* Takes available space */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Send Button - Reduced Width & Aligned */
+button {
+    width: 80px; /* Reduced width */
+    padding: 8px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0056b3;
+}
