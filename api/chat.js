@@ -1,17 +1,15 @@
 export default async function handler(req, res) {
-    // ✅ Fix CORS: Allow requests from GitHub Pages
-    res.setHeader("Access-Control-Allow-Origin", "*"); // Allow all origins temporarily for debugging
+    // ✅ Enable CORS for GitHub Pages
+    res.setHeader("Access-Control-Allow-Origin", "https://abhishek-shukla-in-dev.github.io");
     res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-    // ✅ Handle CORS Preflight Request (OPTIONS)
     if (req.method === "OPTIONS") {
-        return res.status(200).end(); // Respond with HTTP 200 OK for preflight requests
+        return res.status(200).end(); // ✅ Handle CORS preflight requests
     }
 
-    // ✅ Ensure Only POST Requests Are Allowed
     if (req.method !== "POST") {
-        return res.status(405).json({ error: "Method Not Allowed. Only POST requests are supported." });
+        return res.status(405).json({ error: "Only POST requests allowed" });
     }
 
     const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
@@ -21,11 +19,19 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: "Message is required" });
     }
 
-    // Keep last 5 messages for better context
-    const messages = [
-        { 
-            role: "system", 
-            content: `
+    try {
+        const openAIResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${OPENAI_API_KEY}`
+            },
+            body: JSON.stringify({
+                model: "gpt-4",
+                messages: [
+                    { 
+                        role: "system", 
+                        content: `
             You are a friendly, engaging, and intelligent chatbot designed to lift people's mood while also assisting with day-to-day tasks. You are like a kind, supportive friend who balances positivity with practical help.
 
             ### 🎯 **Your Primary User:**
@@ -48,24 +54,11 @@ export default async function handler(req, res) {
 
             Keep your responses **friendly, helpful, and structured**, making sure to **support Alpana both personally and professionally.** 😊
             `
-        },
-        ...chatHistory.slice(-5),  // ✅ Keeps last 5 messages for context
-        { role: "user", content: userMessage }
-    ];
-
-    try {
-        const openAIResponse = await fetch("https://api.openai.com/v1/chat/completions", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${OPENAI_API_KEY}`
-            },
-            body: JSON.stringify({
-                model: "gpt-4",
-                messages: messages,
-                temperature: 0.3,  // ✅ More factual responses
-                max_tokens: 300,   // ✅ Increased length for structured responses
-                response_format: "json" // ✅ Ensures JSON output
+                    },
+                    { role: "user", content: userMessage }
+                ],
+                temperature: 0.3,
+                max_tokens: 300
             })
         });
 
@@ -75,14 +68,9 @@ export default async function handler(req, res) {
             return res.status(500).json({ response: "Sorry, I couldn't generate a response at this time. Please try again later, or ask Abhishek ;)" });
         }
 
-        // ✅ Ensure CORS Headers Are Present in Every Response
-        res.setHeader("Access-Control-Allow-Origin", "https://abhishek-shukla-in-dev.github.io"); 
-
         return res.status(200).json({ response: data.choices[0].message.content });
-
     } catch (error) {
         console.error("Error communicating with OpenAI:", error);
-        res.setHeader("Access-Control-Allow-Origin", "https://abhishek-shukla-in-dev.github.io");
         return res.status(500).json({ response: "Oops! Something went wrong. Please try again later, or ask Abhishek ;)" });
     }
 }
