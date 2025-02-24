@@ -1,8 +1,17 @@
 export default async function handler(req, res) {
     // ✅ Enable CORS for GitHub Pages
-    res.setHeader("Access-Control-Allow-Origin", "https://abhishek-shukla-in-dev.github.io");
+    const allowedOrigins = [
+        "https://abhishek-shukla-in-dev.github.io", 
+        "http://localhost:3000" // ✅ Allows testing locally
+    ];
+    
+    if (allowedOrigins.includes(req.headers.origin)) {
+        res.setHeader("Access-Control-Allow-Origin", req.headers.origin);
+    };
+
     res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
 
     if (req.method === "OPTIONS") {
         return res.status(200).end(); // ✅ Handle CORS preflight requests
@@ -49,7 +58,7 @@ export default async function handler(req, res) {
         const data = await openAIResponse.json();
 
         if (!data.choices || data.choices.length === 0) {
-            return res.status(500).json({ response: "Sorry, I couldn't generate a response. Try again later, or ask Abhishek!" });
+            return res.status(500).json({ response: "Sorry, I couldn't generate a response. Try again later!" });
         }
 
         return res.status(200).json({ response: data.choices[0].message.content });
@@ -57,10 +66,10 @@ export default async function handler(req, res) {
     } catch (error) {
         console.error("Error communicating with OpenAI:", error);
 
-        let errorMessage = "Oops! Something went wrong. Please try again later, or ask Abhishek ;)";
+        let errorMessage = "Oops! Something went wrong. Please try again later.";
         
         if (error.response && error.response.status === 429) {
-            errorMessage = "Too many requests! Please try again later, or ask Abhishek ;)";
+            errorMessage = "Too many requests! Please wait and try again.";
         } else if (error.response && error.response.status === 401) {
             errorMessage = "Invalid API Key. Please check the configuration.";
         }
