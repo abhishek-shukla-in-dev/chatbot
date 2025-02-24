@@ -1,13 +1,22 @@
 export default async function handler(req, res) {
-    if (req.method !== "POST") {
-        return res.status(405).json({ error: "Only POST requests allowed" }); // ✅ Returns correct error
+    // ✅ Enable CORS for GitHub Pages
+    res.setHeader("Access-Control-Allow-Origin", "https://abhishek-shukla-in-dev.github.io");
+    res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+    if (req.method === "OPTIONS") {
+        return res.status(200).end(); // ✅ Handle CORS preflight requests
     }
 
-    const OPENAI_API_KEY = process.env.OPENAI_API_KEY; // Secure API Key
+    if (req.method !== "POST") {
+        return res.status(405).json({ error: "Only POST requests allowed" });
+    }
+
+    const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
     const userMessage = req.body.message;
 
     if (!userMessage) {
-        return res.status(400).json({ error: "Message is required" }); // ✅ Prevents empty messages
+        return res.status(400).json({ error: "Message is required" });
     }
 
     try {
