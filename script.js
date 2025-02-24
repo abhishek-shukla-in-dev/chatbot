@@ -1,5 +1,5 @@
 
-const API_KEY = "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"; // Replace with your actual API key
+const API_KEY = ""; // Replace with your actual API key
 
 async function sendMessage() {
     let userInput = document.getElementById("user-input").value;
