@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
-    // ✅ Handle CORS: Ensure GitHub Pages is allowed
-    res.setHeader("Access-Control-Allow-Origin", "https://abhishek-shukla-in-dev.github.io");
+    // ✅ Fix CORS: Allow requests from GitHub Pages
+    res.setHeader("Access-Control-Allow-Origin", "*"); // Allow all origins temporarily for debugging
     res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
@@ -75,10 +75,14 @@ export default async function handler(req, res) {
             return res.status(500).json({ response: "Sorry, I couldn't generate a response at this time. Please try again later, or ask Abhishek ;)" });
         }
 
+        // ✅ Ensure CORS Headers Are Present in Every Response
+        res.setHeader("Access-Control-Allow-Origin", "https://abhishek-shukla-in-dev.github.io"); 
+
         return res.status(200).json({ response: data.choices[0].message.content });
 
     } catch (error) {
         console.error("Error communicating with OpenAI:", error);
+        res.setHeader("Access-Control-Allow-Origin", "https://abhishek-shukla-in-dev.github.io");
         return res.status(500).json({ response: "Oops! Something went wrong. Please try again later, or ask Abhishek ;)" });
     }
 }
