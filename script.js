@@ -111,3 +111,16 @@ function handleKeyPress(event) {
         sendMessage();
     }
 }
+
+// ✅ Function to Clear Chat and Refresh Conversation
+function clearChat() {
+    let chatBox = document.getElementById("chat-box");
+    chatBox.innerHTML = ""; // Clear all messages
+    chatHistory = []; // Reset chat history
+
+    // Optional: Show a fresh welcome message
+    let botMessage = document.createElement("p");
+    botMessage.classList.add("bot-message");
+    botMessage.innerText = "Chat cleared! How can I help you today? 😊";
+    chatBox.appendChild(botMessage);
+}
