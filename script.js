@@ -10,7 +10,7 @@ async function fetchOpenAIResponse(input) {
 
         let data = await response.json();
 
-        if (!data.response) {
+        if (!data || !data.response) {
             console.error("Error: No valid response from OpenAI", data);
             return "Oops! I couldn't generate a response. Please try again!";
         }
