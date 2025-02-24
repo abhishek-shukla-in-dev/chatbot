@@ -9,7 +9,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
     <!-- ✅ Correct FontAwesome (Fixed CORS Issue) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- ✅ Correct FontAwesome Link -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
     <!-- ✅ Custom Styles -->
     <link rel="stylesheet" href="styles.css">
@@ -20,10 +21,10 @@
         <div class="input-container">
             <input type="text" id="user-input" placeholder="Type a message..." onkeypress="handleKeyPress(event)">
             <button onclick="sendMessage()">
-                <i class="fa-solid fa-paper-plane"></i> <!-- Send Button Icon 📩 -->
+                <i class="fa-solid fa-paper-plane"></i> <!-- ✅ Send Button Icon -->
             </button>
             <button onclick="clearChat()" class="clear-btn">
-                <i class="fa-solid fa-trash"></i> <!-- Clear Chat Icon 🗑️ -->
+                <i class="fa-solid fa-trash"></i> <!-- ✅ Clear Chat Icon -->
             </button>
         </div>
     </div>
