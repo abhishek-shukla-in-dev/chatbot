@@ -1,3 +1,8 @@
+/* ✅ Apply Poppins Font Globally */
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
 /* General Chatbot Styling */
 .chat-container {
     width: 500px;
