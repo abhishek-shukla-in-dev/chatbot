@@ -1,9 +1,13 @@
 export default async function handler(req, res) {
-
     // ✅ Enable CORS for GitHub Pages
     res.setHeader("Access-Control-Allow-Origin", "https://abhishek-shukla-in-dev.github.io"); 
     res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+    // ✅ Handle CORS Preflight Requests (Fixes "It does not have HTTP ok status")
+    if (req.method === "OPTIONS") {
+        return res.status(200).end();
+    }
 
     if (req.method !== "POST") {
         return res.status(405).json({ error: "Only POST requests allowed" });
