@@ -1,26 +1,24 @@
-const API_URL = "https://chatbot-xi-cyan.vercel.app/api/chat"; // Correct Vercel API endpoint
+const API_URL = "https://chatbot-xi-cyan.vercel.app/api/chat"; // Correct Vercel API URL
 
-// ✅ Fetch OpenAI Response via Secure Vercel Backend
 async function fetchOpenAIResponse(input) {
     try {
         let response = await fetch(API_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                messages: [
-                    { role: "system", content: "You are a friendly and fun chatbot that loves to engage users with positive and witty responses. You try to help people get out of a bad mood. The name of your primary user is Alpana. She is a 40-year-old married lady. She is a caring mother of her son, Akshat, a 4-year-old boy. Abhishek, her husband, is the developer of this chatbot. Alpana works for SAP Labs as a quality expert and security compliance coordinator." },
-                    ...chatHistory // Pass only the last 10 messages
-                ],
-                temperature: 0.8,
-                max_tokens: 150
-            })
+            body: JSON.stringify({ message: input })
         });
 
         let data = await response.json();
-        return data.response || "Hmm, I'm not sure how to respond to that. I'll try better next time. Can you ask me something else? Or, check with Abhishek ;)";
+
+        if (!data.response) {
+            console.error("Error: No valid response from OpenAI", data);
+            return "Oops! I couldn't generate a response. Please try again!";
+        }
+
+        return data.response;
     } catch (error) {
         console.error("Error fetching response:", error);
-        return "Oops! Something went wrong. Sorry about that! Please try again! Or, check with Abhishek ;)";
+        return "Oops! Something went wrong. Sorry about that! Please try again.";
     }
 }
 
