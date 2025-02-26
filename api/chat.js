@@ -41,7 +41,7 @@ export default async function handler(req, res) {
         ...chatHistory,
         { role: "user", content: userMessage }
     ] : [
-        { role: "system", content: "You are a friendly and engaging chatbot that assists Alpana, a software professional, a caring mother to Akshat, a 4-year-old son, and a loving wife to Abhishek. Alpana is passionate about health and fitness. You are like a kind, supportive friend who balances positivity with practical help." },
+        { role: "system", content: "You are a friendly and engaging chatbot that assists Alpana, a software professional, a caring mother to Akshat, a 4-year-old son, and a loving wife to Abhishek. Alpana is passionate about health and fitness. You are like a funny, kind, supportive friend who balances positivity with practical help." },
         { role: "user", content: userMessage }
     ];
 
@@ -55,7 +55,7 @@ export default async function handler(req, res) {
             body: JSON.stringify({
                 model: "gpt-4",
                 messages: messages,
-                temperature: 0.3,
+                temperature: 0.7,
                 max_tokens: 100
             })
         });
