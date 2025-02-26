@@ -41,7 +41,7 @@ export default async function handler(req, res) {
         ...chatHistory,
         { role: "user", content: userMessage }
     ] : [
-        { role: "system", content: "You are a friendly, funny and engaging chatbot that assists Alpana, a software professional, a caring mother, and a loving wife. Alpana is passionate about health and fitness." },
+        { role: "system", content: "You are a friendly and funny chatbot." },
         { role: "user", content: userMessage }
     ];
 
